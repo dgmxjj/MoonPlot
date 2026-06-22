@@ -1,0 +1,7 @@
+{
+  "import": [
+    "dgmxjj/moonplot/src/color",
+    "dgmxjj/moonplot/src/backend",
+    "dgmxjj/moonplot/src/coord"
+  ]
+}
