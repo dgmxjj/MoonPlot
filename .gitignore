@@ -1,0 +1,8 @@
+target/
+.moon/
+*.exe
+*.dll
+*.so
+*.dylib
+.DS_Store
+build/
