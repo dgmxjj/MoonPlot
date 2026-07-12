@@ -1,3 +1,4 @@
+///|
 test "color_blend" {
   let c1 = @color.rgba(255, 0, 0, 1.0)
   let c2 = @color.rgba(0, 0, 255, 1.0)

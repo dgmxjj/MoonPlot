@@ -7,13 +7,31 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  test:
+    name: Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
     steps:
-    - uses: actions/checkout@v3
-    - name: Install MoonBit
-      run: curl -fsSL https://cli.moonbitlang.com/install/ubuntu.sh | bash
-    - name: Build
-      run: moon build
-    - name: Test
-      run: moon test
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup MoonBit
+        uses: hustcer/setup-moonbit@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check
+        run: moon check
+
+      - name: Format Check
+        run: moon fmt --deny-warn
+
+      - name: Info Check
+        run: moon info --deny-warn
+
+      - name: Test
+        run: moon test
