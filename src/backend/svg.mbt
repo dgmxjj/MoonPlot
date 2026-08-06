@@ -32,3 +32,13 @@ pub fn to_svg_color(color : @color.Color) -> String {
   let a = color.a
   "rgba(\{r},\{g},\{b},\{a})"
 }
+
+///|
+fn escape_svg_text(value : String) -> String {
+  value
+  .replace_all(old="&", new="&amp;")
+  .replace_all(old="<", new="&lt;")
+  .replace_all(old=">", new="&gt;")
+  .replace_all(old="\"", new="&quot;")
+  .replace_all(old="'", new="&apos;")
+}

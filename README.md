@@ -1,116 +1,135 @@
 # MoonPlot 🌔📊
 
-一个完全由 [MoonBit](https://www.moonbitlang.com/) 原生编写的声明式、高扩展性的数据可视化与图表渲染库。
+MoonPlot 是一个完全由 MoonBit 编写的声明式数据图表生成与可视化库。它把比例尺、图表布局、数据系列和渲染后端拆开，让同一份图表声明可以输出 SVG，也可以生成 Canvas 2D 命令。
 
-[![MoonBit Competition Track 1](https://img.shields.io/badge/MoonBit-OSC2026-blue.svg)]()
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![MoonBit CI](https://github.com/dgmxjj/MoonPlot/actions/workflows/test.yml/badge.svg)](https://github.com/dgmxjj/MoonPlot/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![MoonBit OSC2026](https://img.shields.io/badge/MoonBit-OSC2026-blue.svg)](https://moonbitlang.github.io/OSC2026/)
 
-MoonPlot 旨在填补 MoonBit 应用生态在数据可视化领域的空白，提供一个统一且具备极高扩展性的图表渲染引擎。无论你是需要对算法的 Benchmark 结果进行可视化，还是在后端服务中渲染离线日志，亦或是通过 Wasm 驱动 Web Canvas 渲染，MoonPlot 都能提供简洁优雅的声明式 API。
+## 特性
 
-## ✨ 核心特性
+- 后端无关的 `Backend` trait：内置 `SVGBackend` 和 Canvas 2D 命令后端。
+- 折线图、散点图和柱状图数据系列，支持线性、对数和分类比例尺。
+- `ChartBuilder` + `ChartLayout` 声明式布局：标题、图例、网格和绘图区边界由同一个布局对象计算。
+- 图例宽度自适应，极小画布也保持有效的绘图区；网格可以按图表声明关闭。
+- 纯 MoonBit 实现，带有边界测试、可执行示例和三平台 CI。
 
-- **渲染后端解耦 (Backend Agnostic)**：核心图形计算与底层输出格式完全解耦。目前原生内置了 `SVGBackend`，未来计划支持 `Canvas` 和终端字符画后端。
-- **多图表支持**：内置支持折线图 (Line)、散点图 (Scatter) 与柱状图 (Bar) 等主流图表系列。
-- **灵活的坐标与比例尺**：能够将业务数据域（Data Domain）无缝映射到屏幕像素域，支持线性 (Linear)、对数 (Logarithmic) 及分类 (Category) 比例尺。
-- **主题与颜色管理**：内置丰富的标准调色板、颜色空间转换与混色算法。
+## 安装
 
-## 🏗️ 架构设计
+### 从 Mooncakes 安装
 
-MoonPlot 采用分层架构设计，极大化其扩展能力。核心引擎负责数学映射与网格布局，最终的绘制命令全部交由 `Backend` 接口执行。
-
-```mermaid
-graph TD
-    subgraph 用户数据
-        Data[(原始数据)]
-    end
-
-    subgraph MoonPlot 核心引擎
-        CB[ChartBuilder 图表构建器]
-        S[Scales 坐标与比例尺映射]
-        
-        subgraph 数据系列
-            Line[LineSeries 折线图]
-            Bar[BarSeries 柱状图]
-            Scatter[ScatterSeries 散点图]
-        end
-        
-        Ax[Axis & Grid 坐标轴与网格渲染]
-    end
-
-    subgraph 渲染后端
-        BE{Backend 接口}
-        SVG[SVG Backend]
-        Canvas[Canvas Backend <br/>WIP]
-        Term[终端 ASCII <br/>WIP]
-    end
-
-    Data --> CB
-    CB --> S
-    CB --> Line
-    CB --> Bar
-    CB --> Scatter
-    CB --> Ax
-    
-    Line --> BE
-    Bar --> BE
-    Scatter --> BE
-    Ax --> BE
-
-    BE --> SVG
-    BE --> Canvas
-    BE --> Term
+```bash
+moon add dgmxjj/moonplot@0.3.0
 ```
 
-## 🚀 快速开始
+包发布后，按模块包路径导入，例如 `dgmxjj/moonplot/src/chart`、`dgmxjj/moonplot/src/series` 和 `dgmxjj/moonplot/src/backend`。如果要使用仓库中的示例或参与开发，请直接克隆源码。
 
-下面是一个生成基础 SVG 折线图的概念性示例代码：
+### 从源码运行
+
+请先安装 MoonBit 工具链（建议使用官方安装器；验收 CI 会在 Linux、macOS 和 Windows 上安装工具链及 native 编译依赖）。
+
+```bash
+git clone https://github.com/dgmxjj/MoonPlot.git
+cd MoonPlot
+moon update
+```
+
+## 可执行示例
+
+两个示例都是可直接运行的 MoonBit executable package，会把 SVG 写到标准输出：
+
+```bash
+moon run examples/basic_line > line_chart.svg
+moon run examples/basic_bar > bar_chart.svg
+```
+
+PowerShell 用户可以显式指定 UTF-8 输出：
+
+```powershell
+moon run examples/basic_line | Set-Content -Encoding utf8 line_chart.svg
+moon run examples/basic_bar | Set-Content -Encoding utf8 bar_chart.svg
+```
+
+也可以使用 Make：
+
+```bash
+make examples
+```
+
+`line_chart.svg` 应包含折线 `<line>`、坐标轴、网格和图例；`bar_chart.svg` 应包含柱形 `<rect>`、分类刻度和图例。生成的本地 SVG 不纳入版本控制。
+
+## 最小使用方式
+
+下面的调用顺序展示了真实 API：先声明后端和图表，再从布局对象读取绘图区，最后绘制网格、坐标轴和数据系列。
 
 ```moonbit
-// 示例代码 (WIP API)
-fn main {
-  // 初始化 800x600 的 SVG 渲染后端
-  let backend = @svg.SVGBackend::new(800.0, 600.0)
-  let chart = @chart.ChartBuilder::new(backend)
-    .set_title("我的第一张 MoonPlot 图表")
-  
-  // 配置比例尺映射 (数据域 0..10 映射到像素)
-  let scale_x = @coord.LinearScale::new(0.0, 10.0, 0.0, 800.0)
-  let scale_y = @coord.LinearScale::new(0.0, 100.0, 600.0, 0.0)
-
-  // 添加折线图数据
-  let data = [(1.0, 10.0), (2.0, 40.0), (3.0, 90.0)]
-  let series = @series.LineSeries::new(data).set_color(@color.red)
-
-  // 执行渲染 (框架内部处理图例与坐标系)
-  // chart.draw(series)
-  println("SVG 图表生成完毕！")
-}
+let backend = @backend.SVGBackend::new(800.0, 600.0)
+let chart = @chart.ChartBuilder::new(backend)
+  .set_title("Benchmark")
+  .set_show_grid(true)
+  .add_legend_item("throughput", @color.blue, "line")
+let layout = chart.layout()
+let (x_min, y_min, x_max, y_max) = layout.plot_bounds()
+let scale_x = @coord.LinearScale::new(0.0, 10.0, x_min, x_max)
+let scale_y = @coord.LinearScale::new(0.0, 100.0, y_max, y_min)
+chart.draw_title()
+chart.draw_legend()
+chart.draw_grid(scale_x, scale_y, 6, 6)
+@series.LineSeries::new([(0.0, 10.0), (5.0, 55.0), (10.0, 90.0)])
+  .set_color(@color.blue)
+  .draw(backend, scale_x, scale_y)
+println(backend.to_string())
 ```
 
-## 📂 项目结构
+完整的 API 说明见 [`docs/API.md`](docs/API.md)，布局设计见 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)。
+
+## 项目结构
 
 ```text
-MoonPlot/
-├── src/
-│   ├── backend/    # 渲染后端抽象接口与特定实现 (如 SVG)
-│   ├── chart/      # 图表构建器、坐标轴、网格与图例的布局引擎
-│   ├── color/      # 颜色结构定义与标准调色板
-│   ├── coord/      # 数学坐标系映射与刻度 (Ticks) 计算
-│   └── series/     # 数据系列展示形态 (Line, Scatter, Bar)
-├── docs/           # 进阶文档与设计说明
-├── examples/       # 使用示例代码
-└── moon.mod.json   # MoonBit 项目配置
+src/backend/   Backend trait、SVGBackend、CanvasBackend
+src/chart/     ChartBuilder、ChartLayout、标题、图例、网格和坐标轴
+src/color/     Color、调色板和颜色混合
+src/coord/     LinearScale、LogarithmicScale、CategoryScale
+src/series/    LineSeries、ScatterSeries、BarSeries
+examples/      可执行 SVG 示例
+docs/          API、架构和参考范围
 ```
 
-## 🎯 赛事规划 (OSC2026)
+每个子目录都是独立的 MoonBit package；公开 API 的 `.mbti` 接口文件由 `moon info` 生成并纳入版本控制。
 
-- [x] 核心系统架构设计与 Trait 抽象
-- [x] 基础的 SVG 渲染后端实现
-- [x] 基础图表支持：Line, Bar, Scatter
-- [x] 面向 MoonBit 的 `moon.pkg.json` 模块化改造
-- [ ] 坐标轴刻度 (Tick) 的平滑防碰撞算法
-- [ ] 基于 Wasm 的 Canvas 后端集成
+## 验证与 CI
 
-## 📄 开源协议
+本地常用检查命令：
 
-本项目采用 MIT 协议进行开源。
+```bash
+moon check --target all --deny-warn
+moon build --target all --deny-warn
+moon test --target all --deny-warn
+moon fmt --check
+moon info
+```
+
+GitHub Actions 使用官方 MoonBit 安装器，在 `ubuntu-latest`、`macos-latest` 和 `windows-latest` 上执行同样的全目标检查、构建、测试、格式检查和接口漂移检查。Windows native 构建使用 MSYS2 UCRT64 GCC；本机没有 C 编译器时，可先运行对应平台的 CI 或安装 MSYS2。
+
+## 当前范围与非目标
+
+当前版本覆盖 SVG 离线输出和 Canvas 2D 命令生成；Canvas 后端不直接持有浏览器上下文，调用方负责把 `to_js_code("ctx")` 注入页面。当前不包含动画、交互式坐标轴、自动文本测量和完整 Web UI 组件。布局模块提供稳定的绘图区/图例边界，后续可以在不改变数据系列 API 的情况下扩展这些能力。
+
+## 参考与致谢
+
+- [MoonBit](https://www.moonbitlang.com/)：语言与工具链。
+- [Plotters](https://github.com/plotters-rs/plotters)：后端解耦、比例尺和图表组件组织方式的公开参考，Apache-2.0。
+- [MDN Canvas 2D API](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)：Canvas 命令语义参考。
+- [W3C SVG 2](https://www.w3.org/TR/SVG2/)：SVG 元素和文本转义范围参考。
+
+MoonPlot 未复制上述项目的源代码；参考范围仅限公开 API 设计和图形渲染概念。项目自身使用 MIT License，详见 [`LICENSE`](LICENSE)。
+
+## 项目链接
+
+- GitHub：<https://github.com/dgmxjj/MoonPlot>
+- GitLink：<https://gitlink.org.cn/Dgmxjj/MoonPlot>
+- Mooncakes：<https://mooncakes.io/>
+
+## 许可证
+
+Copyright (c) 2026 Dgmxjj。MoonPlot 使用 [MIT License](LICENSE) 发布。

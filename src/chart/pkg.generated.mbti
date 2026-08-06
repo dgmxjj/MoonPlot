@@ -1,0 +1,68 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "dgmxjj/moonplot/src/chart"
+
+import {
+  "dgmxjj/moonplot/src/backend",
+  "dgmxjj/moonplot/src/color",
+  "dgmxjj/moonplot/src/coord",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct Axis {
+  label : String
+  show_ticks : Bool
+  tick_count : Int
+}
+pub fn[B : @backend.Backend] Axis::draw_category_x_axis(Self, B, @coord.CategoryScale, Double, Double, Double) -> Unit
+pub fn[B : @backend.Backend, S : @coord.Scale] Axis::draw_x_axis(Self, B, S, Double, Double, Double) -> Unit
+pub fn[B : @backend.Backend, S : @coord.Scale] Axis::draw_y_axis(Self, B, S, Double, Double, Double) -> Unit
+pub fn Axis::new(String) -> Self
+
+pub struct ChartBuilder[B] {
+  backend : B
+  title : String
+  padding_left : Double
+  padding_right : Double
+  padding_top : Double
+  padding_bottom : Double
+  show_grid : Bool
+  legend_items : Array[LegendItem]
+}
+pub fn[B] ChartBuilder::add_legend_item(Self[B], String, @color.Color, String) -> Self[B]
+pub fn[B : @backend.Backend, SY : @coord.Scale] ChartBuilder::draw_category_grid(Self[B], @coord.CategoryScale, SY, Int) -> Unit
+pub fn[B : @backend.Backend, SX : @coord.Scale, SY : @coord.Scale] ChartBuilder::draw_grid(Self[B], SX, SY, Int, Int) -> Unit
+pub fn[B : @backend.Backend] ChartBuilder::draw_legend(Self[B]) -> Unit
+pub fn[B : @backend.Backend] ChartBuilder::draw_title(Self[B]) -> Unit
+pub fn[B : @backend.Backend] ChartBuilder::get_plot_bounds(Self[B]) -> (Double, Double, Double, Double)
+pub fn[B : @backend.Backend] ChartBuilder::layout(Self[B]) -> ChartLayout
+pub fn[B] ChartBuilder::new(B) -> Self[B]
+pub fn[B] ChartBuilder::set_padding(Self[B], Double, Double, Double, Double) -> Self[B]
+pub fn[B] ChartBuilder::set_show_grid(Self[B], Bool) -> Self[B]
+pub fn[B] ChartBuilder::set_title(Self[B], String) -> Self[B]
+
+pub struct ChartLayout {
+  plot_x_min : Double
+  plot_y_min : Double
+  plot_x_max : Double
+  plot_y_max : Double
+  legend_x : Double
+  legend_y : Double
+}
+pub fn ChartLayout::legend_origin(Self) -> (Double, Double)
+pub fn ChartLayout::plot_bounds(Self) -> (Double, Double, Double, Double)
+
+pub struct LegendItem {
+  name : String
+  color : @color.Color
+  style : String
+}
+pub fn LegendItem::new(String, @color.Color, String) -> Self
+
+// Type aliases
+
+// Traits
+

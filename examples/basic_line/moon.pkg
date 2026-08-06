@@ -6,6 +6,4 @@ import {
   "dgmxjj/moonplot/src/series",
 }
 
-options(
-  is_main: true,
-)
+pkgtype(kind: "executable")

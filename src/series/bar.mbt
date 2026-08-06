@@ -28,8 +28,9 @@ pub fn[B : @backend.Backend, SY : @coord.Scale] BarSeries::draw(
     let (cat, val) = self.data[i]
     let center_x = scale_x.map(cat)
     let py = scale_y.map(val)
-    let h = baseline_y - py
+    let rect_y = if py < baseline_y { py } else { baseline_y }
+    let h = if baseline_y > py { baseline_y - py } else { py - baseline_y }
     let start_x = center_x - w / 2.0
-    backend.draw_rect(start_x, py, w, h, self.color, true)
+    backend.draw_rect(start_x, rect_y, w, h, self.color, true)
   }
 }

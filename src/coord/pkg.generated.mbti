@@ -1,0 +1,48 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "dgmxjj/moonplot/src/coord"
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct CategoryScale {
+  categories : Array[String]
+  range_min : Double
+  range_max : Double
+}
+pub fn CategoryScale::generate_ticks(Self) -> Array[String]
+pub fn CategoryScale::map(Self, String) -> Double
+pub fn CategoryScale::new(Array[String], Double, Double) -> Self
+
+pub struct LinearScale {
+  domain_min : Double
+  domain_max : Double
+  range_min : Double
+  range_max : Double
+}
+pub fn LinearScale::generate_ticks(Self, Int) -> Array[Double]
+pub fn LinearScale::map(Self, Double) -> Double
+pub fn LinearScale::new(Double, Double, Double, Double) -> Self
+pub impl Scale for LinearScale
+
+pub struct LogarithmicScale {
+  domain_min : Double
+  domain_max : Double
+  range_min : Double
+  range_max : Double
+  base : Double
+}
+pub fn LogarithmicScale::generate_ticks(Self, Int) -> Array[Double]
+pub fn LogarithmicScale::map(Self, Double) -> Double
+pub fn LogarithmicScale::new(Double, Double, Double, Double, base? : Double) -> Self
+pub impl Scale for LogarithmicScale
+
+// Type aliases
+
+// Traits
+pub trait Scale {
+  fn map(Self, Double) -> Double
+  fn generate_ticks(Self, Int) -> Array[Double]
+}
+

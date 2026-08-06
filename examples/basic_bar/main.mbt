@@ -4,7 +4,8 @@ fn main {
   let chart = @chart.ChartBuilder::new(backend)
     .set_title("MoonPlot - 柱状图与分类比例尺示例")
     .add_legend_item("销售额", @color.blue, "bar")
-  let (x_min, y_min, x_max, y_max) = chart.get_plot_bounds()
+  let layout = chart.layout()
+  let (x_min, y_min, x_max, y_max) = layout.plot_bounds()
   let categories = ["一季度", "二季度", "三季度", "四季度"]
   let scale_x = @coord.CategoryScale::new(categories, x_min, x_max)
   let scale_y = @coord.LinearScale::new(0.0, 100.0, y_max, y_min)

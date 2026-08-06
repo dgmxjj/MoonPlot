@@ -1,0 +1,30 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "dgmxjj/moonplot/src/color"
+
+// Values
+pub let black : Color
+
+pub fn blend(Color, Color, Double) -> Color
+
+pub let blue : Color
+
+pub let light_gray : Color
+
+pub let red : Color
+
+pub fn rgba(Int, Int, Int, Double) -> Color
+
+// Errors
+
+// Types and methods
+pub struct Color {
+  r : Int
+  g : Int
+  b : Int
+  a : Double
+}
+
+// Type aliases
+
+// Traits
+

@@ -25,3 +25,32 @@ test "svg_chart_rendering_validation" {
   assert_eq(svg_str.contains("<line "), true)
   assert_eq(svg_str.contains("<text "), true)
 }
+
+///|
+test "chart_layout_separates_plot_and_long_legend" {
+  let backend = @backend.SVGBackend::new(400.0, 240.0)
+  let chart = @chart.ChartBuilder::new(backend)
+    .set_title("Layout")
+    .set_show_grid(false)
+    .add_legend_item("A deliberately long series name", @color.blue, "line")
+  let layout = chart.layout()
+  let (x_min, _, x_max, _) = layout.plot_bounds()
+  let (legend_x, _) = layout.legend_origin()
+  assert_true(x_min < x_max)
+  assert_true(x_max < legend_x)
+  let scale_x = @coord.LinearScale::new(0.0, 1.0, x_min, x_max)
+  let scale_y = @coord.LinearScale::new(0.0, 1.0, 100.0, 0.0)
+  chart.draw_grid(scale_x, scale_y, 4, 4)
+  assert_true(!backend.to_string().contains("rgba(220,220,220,0.8)"))
+}
+
+///|
+test "chart_layout_keeps_a_positive_plot_for_small_canvas" {
+  let backend = @backend.SVGBackend::new(120.0, 120.0)
+  let chart = @chart.ChartBuilder::new(backend).add_legend_item(
+    "A long legend entry", @color.blue, "line",
+  )
+  let (x_min, y_min, x_max, y_max) = chart.layout().plot_bounds()
+  assert_true(x_min < x_max)
+  assert_true(y_min < y_max)
+}

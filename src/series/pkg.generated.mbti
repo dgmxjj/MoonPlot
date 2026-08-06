@@ -1,0 +1,52 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "dgmxjj/moonplot/src/series"
+
+import {
+  "dgmxjj/moonplot/src/backend",
+  "dgmxjj/moonplot/src/color",
+  "dgmxjj/moonplot/src/coord",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub(all) struct BarSeries {
+  data : Array[(String, Double)]
+  color : @color.Color
+  bar_width : Double
+}
+pub fn[B : @backend.Backend, SY : @coord.Scale] BarSeries::draw(Self, B, @coord.CategoryScale, SY) -> Unit
+pub fn BarSeries::new(Array[(String, Double)]) -> Self
+
+pub(all) struct LineSeries {
+  points : Array[(Double, Double)]
+  color : @color.Color
+  width : Double
+  smooth : Bool
+}
+pub fn[B : @backend.Backend, SX : @coord.Scale, SY : @coord.Scale] LineSeries::draw(Self, B, SX, SY) -> Unit
+pub fn LineSeries::new(Array[(Double, Double)]) -> Self
+pub fn LineSeries::set_color(Self, @color.Color) -> Self
+pub fn LineSeries::set_width(Self, Double) -> Self
+
+pub(all) enum PointStyle {
+  Circle
+  Square
+  Cross
+}
+
+pub(all) struct ScatterSeries {
+  points : Array[(Double, Double)]
+  radius : Double
+  color : @color.Color
+  style : PointStyle
+}
+pub fn[B : @backend.Backend, SX : @coord.Scale, SY : @coord.Scale] ScatterSeries::draw(Self, B, SX, SY) -> Unit
+pub fn ScatterSeries::new(Array[(Double, Double)]) -> Self
+
+// Type aliases
+
+// Traits
+

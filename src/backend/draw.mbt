@@ -78,6 +78,7 @@ pub impl Backend for SVGBackend with fn draw_text(
   baseline,
 ) {
   let c = to_svg_color(color)
+  let escaped_text = escape_svg_text(text)
   let anchor = match align {
     TextAlign::Left => "start"
     TextAlign::Center => "middle"
@@ -89,6 +90,6 @@ pub impl Backend for SVGBackend with fn draw_text(
     TextBaseline::Bottom => "alphabetic"
   }
   let style = "font-family: \{font.family}; font-size: \{font.size}px; font-weight: \{font.weight}; fill: \{c};"
-  let svg = "<text x=\"\{x}\" y=\"\{y}\" text-anchor=\"\{anchor}\" dominant-baseline=\"\{dom_baseline}\" style=\"\{style}\">\{text}</text>"
+  let svg = "<text x=\"\{x}\" y=\"\{y}\" text-anchor=\"\{anchor}\" dominant-baseline=\"\{dom_baseline}\" style=\"\{style}\">\{escaped_text}</text>"
   self.add_raw(svg)
 }

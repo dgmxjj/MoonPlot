@@ -27,6 +27,29 @@ pub struct ChartBuilder[B] {
 }
 
 ///|
+/// Calculated chart regions used to keep the plot and legend separated.
+pub struct ChartLayout {
+  plot_x_min : Double
+  plot_y_min : Double
+  plot_x_max : Double
+  plot_y_max : Double
+  legend_x : Double
+  legend_y : Double
+}
+
+///|
+pub fn ChartLayout::plot_bounds(
+  self : ChartLayout,
+) -> (Double, Double, Double, Double) {
+  (self.plot_x_min, self.plot_y_min, self.plot_x_max, self.plot_y_max)
+}
+
+///|
+pub fn ChartLayout::legend_origin(self : ChartLayout) -> (Double, Double) {
+  (self.legend_x, self.legend_y)
+}
+
+///|
 pub fn[B] ChartBuilder::new(backend : B) -> ChartBuilder[B] {
   {
     backend,
@@ -46,6 +69,15 @@ pub fn[B] ChartBuilder::set_title(
   title : String,
 ) -> ChartBuilder[B] {
   { ..self, title, }
+}
+
+///|
+/// Enable or disable the grid without changing the chart declaration.
+pub fn[B] ChartBuilder::set_show_grid(
+  self : ChartBuilder[B],
+  show_grid : Bool,
+) -> ChartBuilder[B] {
+  { ..self, show_grid, }
 }
 
 ///|
@@ -77,15 +109,57 @@ pub fn[B] ChartBuilder::add_legend_item(
 }
 
 ///|
+fn legend_width(items : Array[LegendItem]) -> Double {
+  let mut max_width = 0.0
+  for i = 0; i < items.length(); i = i + 1 {
+    let item_width = items[i].name.length().to_double() * 7.0 + 35.0
+    if item_width > max_width {
+      max_width = item_width
+    }
+  }
+  max_width
+}
+
+///|
+pub fn[B : @backend.Backend] ChartBuilder::layout(
+  self : ChartBuilder[B],
+) -> ChartLayout {
+  let (w, h) = self.backend.get_size()
+  let required_legend_padding = legend_width(self.legend_items) + 35.0
+  let right_padding = if self.padding_right > required_legend_padding {
+    self.padding_right
+  } else {
+    required_legend_padding
+  }
+  let x_min = self.padding_left
+  let requested_x_max = w - right_padding
+  let x_max = if requested_x_max > x_min {
+    requested_x_max
+  } else {
+    x_min + 1.0
+  }
+  let y_min = self.padding_top + (if self.title != "" { 20.0 } else { 0.0 })
+  let requested_y_max = h - self.padding_bottom
+  let y_max = if requested_y_max > y_min {
+    requested_y_max
+  } else {
+    y_min + 1.0
+  }
+  {
+    plot_x_min: x_min,
+    plot_y_min: y_min,
+    plot_x_max: x_max,
+    plot_y_max: y_max,
+    legend_x: x_max + 10.0,
+    legend_y: self.padding_top + 10.0,
+  }
+}
+
+///|
 pub fn[B : @backend.Backend] ChartBuilder::get_plot_bounds(
   self : ChartBuilder[B],
 ) -> (Double, Double, Double, Double) {
-  let (w, h) = self.backend.get_size()
-  let x_min = self.padding_left
-  let x_max = w - self.padding_right
-  let y_min = self.padding_top + (if self.title != "" { 20.0 } else { 0.0 })
-  let y_max = h - self.padding_bottom
-  (x_min, y_min, x_max, y_max)
+  self.layout().plot_bounds()
 }
 
 ///|
@@ -119,9 +193,7 @@ pub fn[B : @backend.Backend] ChartBuilder::draw_legend(
   if count == 0 {
     return
   }
-  let (w, _) = self.backend.get_size()
-  let legend_x = w - self.padding_right + 10.0
-  let legend_y_start = self.padding_top + 10.0
+  let (legend_x, legend_y_start) = self.layout().legend_origin()
   let font = @backend.Font::default()
   for i = 0; i < count; i = i + 1 {
     let item = self.legend_items[i]

@@ -1,0 +1,65 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "dgmxjj/moonplot/src/backend"
+
+import {
+  "dgmxjj/moonplot/src/color",
+}
+
+// Values
+pub fn to_canvas_color(@color.Color) -> String
+
+pub fn to_svg_color(@color.Color) -> String
+
+// Errors
+
+// Types and methods
+pub struct CanvasBackend {
+  commands : Array[String]
+  width : Double
+  height : Double
+}
+pub fn CanvasBackend::new(Double, Double) -> Self
+pub fn CanvasBackend::to_js_code(Self, String) -> String
+pub impl Backend for CanvasBackend
+
+pub(all) struct Font {
+  family : String
+  size : Double
+  weight : String
+}
+pub fn Font::default() -> Self
+
+pub struct SVGBackend {
+  mut content : String
+  width : Double
+  height : Double
+}
+pub fn SVGBackend::add_raw(Self, String) -> Unit
+pub fn SVGBackend::new(Double, Double) -> Self
+pub fn SVGBackend::to_string(Self) -> String
+pub impl Backend for SVGBackend
+
+pub(all) enum TextAlign {
+  Left
+  Center
+  Right
+}
+
+pub(all) enum TextBaseline {
+  Top
+  Middle
+  Bottom
+}
+
+// Type aliases
+
+// Traits
+pub trait Backend {
+  fn get_size(Self) -> (Double, Double)
+  fn draw_line(Self, Double, Double, Double, Double, @color.Color, Double) -> Unit
+  fn draw_rect(Self, Double, Double, Double, Double, @color.Color, Bool) -> Unit
+  fn draw_circle(Self, Double, Double, Double, @color.Color, Bool) -> Unit
+  fn draw_polygon(Self, Array[(Double, Double)], @color.Color, Bool) -> Unit
+  fn draw_text(Self, String, Double, Double, Font, @color.Color, TextAlign, TextBaseline) -> Unit
+}
+

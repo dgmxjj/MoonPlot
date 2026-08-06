@@ -32,6 +32,15 @@ pub fn to_canvas_color(color : @color.Color) -> String {
 }
 
 ///|
+fn escape_js_string(value : String) -> String {
+  value
+  .replace_all(old="\\", new="\\\\")
+  .replace_all(old="'", new="\\'")
+  .replace_all(old="\n", new="\\n")
+  .replace_all(old="\r", new="\\r")
+}
+
+///|
 pub impl Backend for CanvasBackend with fn get_size(self) {
   (self.width, self.height)
 }
@@ -139,6 +148,7 @@ pub impl Backend for CanvasBackend with fn draw_text(
   baseline,
 ) {
   let c = to_canvas_color(color)
+  let escaped_text = escape_js_string(text)
   let anchor = match align {
     TextAlign::Left => "left"
     TextAlign::Center => "center"
@@ -153,5 +163,5 @@ pub impl Backend for CanvasBackend with fn draw_text(
   self.commands.push("fillStyle = '\{c}';")
   self.commands.push("textAlign = '\{anchor}';")
   self.commands.push("textBaseline = '\{base}';")
-  self.commands.push("fillText('\{text}', \{x}, \{y});")
+  self.commands.push("fillText('\{escaped_text}', \{x}, \{y});")
 }
