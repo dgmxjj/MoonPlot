@@ -85,4 +85,5 @@ jobs:
       - name: Check generated public interfaces
         run: |
           moon info
+          find . -name 'pkg.generated.mbti' -type f -print0 | xargs -0 -r sed -i '${/^$/d;}'
           git diff --exit-code
