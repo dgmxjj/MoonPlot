@@ -10,6 +10,11 @@ on:
 permissions:
   contents: read
 
+env:
+  # The committee's acceptance baseline is MoonBit 0.10.3. Pinning avoids
+  # formatter/interface drift when the public installer moves to a new release.
+  MOONBIT_INSTALL_VERSION: "0.10.3"
+
 jobs:
   build:
     name: MoonBit (${{ matrix.os }})
@@ -85,9 +90,7 @@ jobs:
           rm -f benchmark.svg
 
       - name: Check formatting
-        run: |
-          moon fmt
-          git diff --exit-code
+        run: moon fmt --check
 
       - name: Check generated public interfaces
         run: |
