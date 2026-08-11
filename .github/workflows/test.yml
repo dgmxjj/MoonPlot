@@ -95,5 +95,11 @@ jobs:
       - name: Check generated public interfaces
         run: |
           moon info
-          find . -name 'pkg.generated.mbti' -type f -print0 | xargs -0 -r sed -i '${/^$/d;}'
+          python - <<'PY'
+          from pathlib import Path
+
+          for path in Path('.').rglob('pkg.generated.mbti'):
+              text = path.read_text(encoding='utf-8-sig').rstrip() + '\n'
+              path.write_text(text, encoding='utf-8')
+          PY
           git diff --exit-code
