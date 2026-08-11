@@ -11,6 +11,51 @@ pub fn BarSeries::new(data : Array[(String, Double)]) -> BarSeries {
 }
 
 ///|
+pub fn BarSeries::set_color(
+  self : BarSeries,
+  color : @color.Color,
+) -> BarSeries {
+  { ..self, color, }
+}
+
+///|
+/// Keep bars inside their category slot even when a caller supplies an
+/// invalid width.
+pub fn BarSeries::set_bar_width(self : BarSeries, width : Double) -> BarSeries {
+  let safe = if width < 0.0 { 0.0 } else if width > 1.0 { 1.0 } else { width }
+  { ..self, bar_width: safe }
+}
+
+///|
+pub fn BarSeries::values(self : BarSeries) -> Array[Double] {
+  let output : Array[Double] = []
+  for item in self.data {
+    output.push(item.1)
+  }
+  output
+}
+
+///|
+/// Return the value range, including zero so the baseline is always visible.
+pub fn BarSeries::bounds(self : BarSeries) -> (Double, Double) {
+  if self.data.length() == 0 {
+    return (0.0, 0.0)
+  }
+  let mut low = 0.0
+  let mut high = 0.0
+  for item in self.data {
+    let value = item.1
+    if value < low {
+      low = value
+    }
+    if value > high {
+      high = value
+    }
+  }
+  (low, high)
+}
+
+///|
 pub fn[B : @backend.Backend, SY : @coord.Scale] BarSeries::draw(
   self : BarSeries,
   backend : B,

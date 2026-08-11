@@ -77,6 +77,13 @@ jobs:
       - name: Test all targets
         run: moon test --target all --deny-warn
 
+      - name: Run benchmark example
+        run: |
+          moon run examples/benchmark_summary --target wasm > benchmark.svg
+          grep -q 'UCI Iris petal width (n=18)' benchmark.svg
+          grep -q '<line ' benchmark.svg
+          rm -f benchmark.svg
+
       - name: Check formatting
         run: |
           moon fmt

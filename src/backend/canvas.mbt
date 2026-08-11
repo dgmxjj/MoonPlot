@@ -23,6 +23,26 @@ pub fn CanvasBackend::to_js_code(
 }
 
 ///|
+pub fn CanvasBackend::command_count(self : CanvasBackend) -> Int {
+  self.commands.length()
+}
+
+///|
+/// Return an empty command for an invalid index so inspection tools can stay
+/// total while rendering is in progress.
+pub fn CanvasBackend::command_at(self : CanvasBackend, index : Int) -> String {
+  if index < 0 || index >= self.commands.length() {
+    return ""
+  }
+  self.commands[index]
+}
+
+///|
+pub fn CanvasBackend::clear(self : CanvasBackend) -> Unit {
+  self.commands.clear()
+}
+
+///|
 pub fn to_canvas_color(color : @color.Color) -> String {
   let r = color.r
   let g = color.g

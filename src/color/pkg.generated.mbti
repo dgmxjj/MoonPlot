@@ -1,4 +1,4 @@
-// Generated using `moon info`, DON'T EDIT IT
+﻿// Generated using `moon info`, DON'T EDIT IT
 package "dgmxjj/moonplot/src/color"
 
 // Values
@@ -8,7 +8,11 @@ pub fn blend(Color, Color, Double) -> Color
 
 pub let blue : Color
 
+pub fn gradient(Color, Color, Int) -> Array[Color]
+
 pub let light_gray : Color
+
+pub fn palette(Int) -> Array[Color]
 
 pub let red : Color
 
@@ -23,8 +27,10 @@ pub struct Color {
   b : Int
   a : Double
 }
+pub fn Color::contrast_ratio(Self, Self) -> Double
+pub fn Color::luminance(Self) -> Double
+pub fn Color::with_alpha(Self, Double) -> Self
 
 // Type aliases
 
 // Traits
-

@@ -1,0 +1,67 @@
+﻿// Generated using `moon info`, DON'T EDIT IT
+package "dgmxjj/moonplot/src/stats"
+
+// Values
+
+// Errors
+
+// Types and methods
+pub(all) struct HistogramBin {
+  lower : Double
+  upper : Double
+  count : Int
+}
+
+pub(all) struct NumericSeries {
+  name : String
+  data : Array[Double]
+}
+pub fn NumericSeries::clip(Self, Double, Double) -> Self
+pub fn NumericSeries::correlation(Self, Self) -> Double
+pub fn NumericSeries::cumulative_sum(Self) -> Self
+pub fn NumericSeries::difference(Self) -> Self
+pub fn NumericSeries::exponential_moving_average(Self, Double) -> Self
+pub fn NumericSeries::histogram(Self, Int) -> Array[HistogramBin]
+pub fn NumericSeries::is_empty(Self) -> Bool
+pub fn NumericSeries::length(Self) -> Int
+pub fn NumericSeries::map_values(Self, (Double) -> Double) -> Self
+pub fn NumericSeries::max(Self) -> Double
+pub fn NumericSeries::mean(Self) -> Double
+pub fn NumericSeries::median_absolute_deviation(Self) -> Double
+pub fn NumericSeries::min(Self) -> Double
+pub fn NumericSeries::moving_average(Self, Int) -> Self
+pub fn NumericSeries::name(Self) -> String
+pub fn NumericSeries::new(String, Array[Double]) -> Self
+pub fn NumericSeries::normalize(Self) -> Self
+pub fn NumericSeries::outlier_indices(Self, Double) -> Array[Int]
+pub fn NumericSeries::percent_change(Self) -> Self
+pub fn NumericSeries::quantile(Self, Double) -> Double
+pub fn NumericSeries::resample(Self, Int) -> Self
+pub fn NumericSeries::rolling_max(Self, Int) -> Self
+pub fn NumericSeries::rolling_min(Self, Int) -> Self
+pub fn NumericSeries::scale(Self, Double) -> Self
+pub fn NumericSeries::shift(Self, Double) -> Self
+pub fn NumericSeries::slice(Self, Int, Int) -> Self
+pub fn NumericSeries::stddev(Self) -> Double
+pub fn NumericSeries::sum(Self) -> Double
+pub fn NumericSeries::summary(Self) -> Summary
+pub fn NumericSeries::take(Self, Int) -> Self
+pub fn NumericSeries::values(Self) -> Array[Double]
+pub fn NumericSeries::variance(Self) -> Double
+
+pub(all) struct Summary {
+  count : Int
+  min : Double
+  max : Double
+  mean : Double
+  median : Double
+  variance : Double
+  stddev : Double
+}
+pub fn Summary::coefficient_of_variation(Self) -> Double
+pub fn Summary::is_constant(Self) -> Bool
+pub fn Summary::range(Self) -> Double
+
+// Type aliases
+
+// Traits

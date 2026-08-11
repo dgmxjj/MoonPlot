@@ -19,6 +19,65 @@ pub fn ScatterSeries::new(points : Array[(Double, Double)]) -> ScatterSeries {
 }
 
 ///|
+pub fn ScatterSeries::set_color(
+  self : ScatterSeries,
+  color : @color.Color,
+) -> ScatterSeries {
+  { ..self, color, }
+}
+
+///|
+pub fn ScatterSeries::set_radius(
+  self : ScatterSeries,
+  radius : Double,
+) -> ScatterSeries {
+  { ..self, radius: if radius > 0.0 { radius } else { 0.0 } }
+}
+
+///|
+pub fn ScatterSeries::set_style(
+  self : ScatterSeries,
+  style : PointStyle,
+) -> ScatterSeries {
+  { ..self, style, }
+}
+
+///|
+pub fn ScatterSeries::point_count(self : ScatterSeries) -> Int {
+  self.points.length()
+}
+
+///|
+pub fn ScatterSeries::bounds(
+  self : ScatterSeries,
+) -> (Double, Double, Double, Double) {
+  if self.points.length() == 0 {
+    return (0.0, 0.0, 0.0, 0.0)
+  }
+  let (first_x, first_y) = self.points[0]
+  let mut x_min = first_x
+  let mut x_max = first_x
+  let mut y_min = first_y
+  let mut y_max = first_y
+  for i = 1; i < self.points.length(); i = i + 1 {
+    let (x, y) = self.points[i]
+    if x < x_min {
+      x_min = x
+    }
+    if x > x_max {
+      x_max = x
+    }
+    if y < y_min {
+      y_min = y
+    }
+    if y > y_max {
+      y_max = y
+    }
+  }
+  (x_min, y_min, x_max, y_max)
+}
+
+///|
 pub fn[B : @backend.Backend, SX : @coord.Scale, SY : @coord.Scale] ScatterSeries::draw(
   self : ScatterSeries,
   backend : B,

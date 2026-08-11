@@ -40,12 +40,31 @@
 
 ## Series
 
-- `LineSeries::new(points).set_color(color).set_width(width).draw(...)`
-- `ScatterSeries::new(points).draw(...)`，支持 `Circle`、`Square`、`Cross`。
-- `BarSeries::new((category, value) data).draw(...)`，柱子同时正确处理正值、零值和负值。
+- `LineSeries::new(points).set_color(color).set_width(width).set_smooth(bool).bounds()`
+- `ScatterSeries::new(points).set_color(color).set_radius(radius).set_style(style).bounds()`，支持 `Circle`、`Square`、`Cross`。
+- `BarSeries::new((category, value) data).set_color(color).set_bar_width(width).bounds()`，柱子同时正确处理正值、零值和负值。
+- `StackedBarSeries::new((category, values) data).draw(...)` 将正负段分别从零线向外堆叠。
 
 数据系列只接收比例尺和 `Backend`，因此同一系列可以渲染到 SVG 或 Canvas 后端。
 
+## Data and statistics
+
+`@data.CsvTable::parse(text)` 是不依赖文件系统的 CSV 入口，支持引号字段、逗号、空字段和 CRLF。结果为 `Result[CsvTable, CsvError]`；`numeric_column(name)` 会把列转换为 `Array[Double]`，非法数字报告数据行号。
+
+`@stats.NumericSeries` 提供：
+
+- `summary()`：样本数、最小值、最大值、均值、中位数、方差和标准差；
+- `quantile()`、`histogram()`、`normalize()`、`clip()`、`moving_average()`、`correlation()`；
+- `median_absolute_deviation()`、`outlier_indices()`、`rolling_min()`、`rolling_max()` 和 `resample()`。
+
+所有统计方法对空序列、常数序列、非法窗口、非法分箱数和目标样本数做确定性处理，适合在渲染前作为数据清洗与降采样层。
+
+## Responsive layout and colors
+
+- `@layout.PanelGrid` 计算带边距/间距的行列面板，`panel(index)` 以行优先顺序返回 `Rect`；`columns_for_width()` 可用于响应式仪表盘。
+- `@layout.LegendLayout` 支持垂直或水平图例流，水平流会在最大宽度处换行，避免图例覆盖绘图区。
+- `@color.palette(count)` 生成稳定的分类色板；`gradient()`、`Color::with_alpha()`、`luminance()` 和 `contrast_ratio()` 用于主题与可读性检查。
+
 ## 版本与兼容性
 
-当前模块版本为 `0.3.0`，目标是 MoonBit 0.10.3 兼容的 `moon.mod` / `moon.pkg` 配置。具体工具链版本可能继续更新；提交前请运行 README 中的全目标验证命令。
+当前模块版本为 `0.3.0`，目标是 MoonBit 0.10.3 兼容的 `moon.mod` / `moon.pkg` 配置。新增统计与布局包保持独立导入；提交前请运行 README 中的全目标验证命令。

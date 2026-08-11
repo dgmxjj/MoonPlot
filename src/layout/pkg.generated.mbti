@@ -1,0 +1,76 @@
+﻿// Generated using `moon info`, DON'T EDIT IT
+package "dgmxjj/moonplot/src/layout"
+
+// Values
+
+// Errors
+
+// Types and methods
+pub(all) struct LegendEntry {
+  label : String
+  width : Double
+}
+
+pub(all) enum LegendFlow {
+  Vertical
+  Horizontal
+}
+
+pub(all) struct LegendLayout {
+  origin_x : Double
+  origin_y : Double
+  max_width : Double
+  line_height : Double
+  gap : Double
+  flow : LegendFlow
+  entries : Array[LegendEntry]
+}
+pub fn LegendLayout::add(Self, String, Double) -> Self
+pub fn LegendLayout::content_size(Self) -> (Double, Double)
+pub fn LegendLayout::entry_count(Self) -> Int
+pub fn LegendLayout::item_position(Self, Int) -> (Double, Double)
+pub fn LegendLayout::new(Double, Double, Double) -> Self
+pub fn LegendLayout::rows(Self) -> Int
+pub fn LegendLayout::set_flow(Self, LegendFlow) -> Self
+pub fn LegendLayout::set_gap(Self, Double) -> Self
+pub fn LegendLayout::set_line_height(Self, Double) -> Self
+
+pub(all) struct PanelGrid {
+  row_count : Int
+  column_count : Int
+  width : Double
+  height : Double
+  gap_x : Double
+  gap_y : Double
+  margin_left : Double
+  margin_right : Double
+  margin_top : Double
+  margin_bottom : Double
+}
+pub fn PanelGrid::columns(Self) -> Int
+pub fn PanelGrid::columns_for_width(Double, Double, Double) -> Int
+pub fn PanelGrid::content_bounds(Self) -> Rect
+pub fn PanelGrid::new(Int, Int, Double, Double) -> Self
+pub fn PanelGrid::panel(Self, Int) -> Rect
+pub fn PanelGrid::panel_count(Self) -> Int
+pub fn PanelGrid::row_column(Self, Int) -> (Int, Int)
+pub fn PanelGrid::rows(Self) -> Int
+pub fn PanelGrid::set_gap(Self, Double, Double) -> Self
+pub fn PanelGrid::set_margins(Self, Double, Double, Double, Double) -> Self
+
+pub(all) struct Rect {
+  x : Double
+  y : Double
+  width : Double
+  height : Double
+}
+pub fn Rect::area(Self) -> Double
+pub fn Rect::bottom(Self) -> Double
+pub fn Rect::contains(Self, Double, Double) -> Bool
+pub fn Rect::inset(Self, Double) -> Self
+pub fn Rect::is_empty(Self) -> Bool
+pub fn Rect::right(Self) -> Double
+
+// Type aliases
+
+// Traits

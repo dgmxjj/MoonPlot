@@ -22,3 +22,13 @@ test "canvas_backend_ignores_empty_polygon" {
   backend.draw_polygon([], @color.blue, true)
   assert_eq(backend.to_js_code("ctx"), "")
 }
+
+///|
+test "canvas_backend_exposes_reproducible_command_lifecycle" {
+  let backend = CanvasBackend::new(320.0, 200.0)
+  backend.draw_rect(1.0, 2.0, 10.0, 20.0, @color.blue, true)
+  assert_eq(backend.command_count(), 2)
+  assert_true(backend.command_at(1).contains("fillRect"))
+  backend.clear()
+  assert_eq(backend.command_count(), 0)
+}

@@ -21,7 +21,48 @@ pub fn LineSeries::set_color(
 
 ///|
 pub fn LineSeries::set_width(self : LineSeries, width : Double) -> LineSeries {
-  { ..self, width, }
+  { ..self, width: if width > 0.0 { width } else { 0.0 } }
+}
+
+///|
+pub fn LineSeries::set_smooth(self : LineSeries, smooth : Bool) -> LineSeries {
+  { ..self, smooth, }
+}
+
+///|
+pub fn LineSeries::is_smooth(self : LineSeries) -> Bool {
+  self.smooth
+}
+
+///|
+/// Return `(x_min, y_min, x_max, y_max)` for autoscaling and annotations.
+pub fn LineSeries::bounds(
+  self : LineSeries,
+) -> (Double, Double, Double, Double) {
+  if self.points.length() == 0 {
+    return (0.0, 0.0, 0.0, 0.0)
+  }
+  let (first_x, first_y) = self.points[0]
+  let mut x_min = first_x
+  let mut x_max = first_x
+  let mut y_min = first_y
+  let mut y_max = first_y
+  for i = 1; i < self.points.length(); i = i + 1 {
+    let (x, y) = self.points[i]
+    if x < x_min {
+      x_min = x
+    }
+    if x > x_max {
+      x_max = x
+    }
+    if y < y_min {
+      y_min = y
+    }
+    if y > y_max {
+      y_max = y
+    }
+  }
+  (x_min, y_min, x_max, y_max)
 }
 
 ///|

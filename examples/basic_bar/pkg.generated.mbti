@@ -1,4 +1,4 @@
-// Generated using `moon info`, DON'T EDIT IT
+﻿// Generated using `moon info`, DON'T EDIT IT
 package "dgmxjj/moonplot/examples/basic_bar"
 
 // Values
@@ -10,4 +10,3 @@ package "dgmxjj/moonplot/examples/basic_bar"
 // Type aliases
 
 // Traits
-

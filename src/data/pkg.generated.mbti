@@ -1,0 +1,36 @@
+﻿// Generated using `moon info`, DON'T EDIT IT
+package "dgmxjj/moonplot/src/data"
+
+// Values
+
+// Errors
+
+// Types and methods
+pub(all) enum CsvError {
+  EmptyInput
+  UnterminatedQuote(Int)
+  InconsistentColumns(Int)
+  InvalidNumber(Int)
+  MissingColumn(String)
+}
+
+pub(all) struct CsvTable {
+  header : Array[String]
+  rows : Array[Array[String]]
+}
+pub fn CsvTable::cell(Self, Int, Int) -> String
+pub fn CsvTable::column(Self, String) -> Array[String]
+pub fn CsvTable::column_count(Self) -> Int
+pub fn CsvTable::filter_equals(Self, String, String) -> Self
+pub fn CsvTable::has_column(Self, String) -> Bool
+pub fn CsvTable::headers(Self) -> Array[String]
+pub fn CsvTable::is_empty(Self) -> Bool
+pub fn CsvTable::numeric_column(Self, String) -> Result[Array[Double], CsvError]
+pub fn CsvTable::parse(String) -> Result[Self, CsvError]
+pub fn CsvTable::row_count(Self) -> Int
+pub fn CsvTable::select_columns(Self, Array[String]) -> Result[Self, CsvError]
+pub fn CsvTable::to_csv(Self) -> String
+
+// Type aliases
+
+// Traits

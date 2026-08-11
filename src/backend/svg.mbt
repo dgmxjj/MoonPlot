@@ -3,6 +3,7 @@ pub struct SVGBackend {
   mut content : String
   width : Double
   height : Double
+  mut elements : Int
 }
 
 ///|
@@ -11,12 +12,19 @@ pub fn SVGBackend::new(width : Double, height : Double) -> SVGBackend {
     content: "<svg width=\"\{width}\" height=\"\{height}\" xmlns=\"http://www.w3.org/2000/svg\">\n",
     width,
     height,
+    elements: 0,
   }
 }
 
 ///|
 pub fn SVGBackend::add_raw(self : SVGBackend, raw : String) -> Unit {
   self.content = self.content + raw + "\n"
+  self.elements = self.elements + 1
+}
+
+///|
+pub fn SVGBackend::element_count(self : SVGBackend) -> Int {
+  self.elements
 }
 
 ///|

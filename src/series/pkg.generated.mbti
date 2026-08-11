@@ -1,4 +1,4 @@
-// Generated using `moon info`, DON'T EDIT IT
+﻿// Generated using `moon info`, DON'T EDIT IT
 package "dgmxjj/moonplot/src/series"
 
 import {
@@ -17,8 +17,12 @@ pub(all) struct BarSeries {
   color : @color.Color
   bar_width : Double
 }
+pub fn BarSeries::bounds(Self) -> (Double, Double)
 pub fn[B : @backend.Backend, SY : @coord.Scale] BarSeries::draw(Self, B, @coord.CategoryScale, SY) -> Unit
 pub fn BarSeries::new(Array[(String, Double)]) -> Self
+pub fn BarSeries::set_bar_width(Self, Double) -> Self
+pub fn BarSeries::set_color(Self, @color.Color) -> Self
+pub fn BarSeries::values(Self) -> Array[Double]
 
 pub(all) struct LineSeries {
   points : Array[(Double, Double)]
@@ -26,9 +30,12 @@ pub(all) struct LineSeries {
   width : Double
   smooth : Bool
 }
+pub fn LineSeries::bounds(Self) -> (Double, Double, Double, Double)
 pub fn[B : @backend.Backend, SX : @coord.Scale, SY : @coord.Scale] LineSeries::draw(Self, B, SX, SY) -> Unit
+pub fn LineSeries::is_smooth(Self) -> Bool
 pub fn LineSeries::new(Array[(Double, Double)]) -> Self
 pub fn LineSeries::set_color(Self, @color.Color) -> Self
+pub fn LineSeries::set_smooth(Self, Bool) -> Self
 pub fn LineSeries::set_width(Self, Double) -> Self
 
 pub(all) enum PointStyle {
@@ -43,10 +50,27 @@ pub(all) struct ScatterSeries {
   color : @color.Color
   style : PointStyle
 }
+pub fn ScatterSeries::bounds(Self) -> (Double, Double, Double, Double)
 pub fn[B : @backend.Backend, SX : @coord.Scale, SY : @coord.Scale] ScatterSeries::draw(Self, B, SX, SY) -> Unit
 pub fn ScatterSeries::new(Array[(Double, Double)]) -> Self
+pub fn ScatterSeries::point_count(Self) -> Int
+pub fn ScatterSeries::set_color(Self, @color.Color) -> Self
+pub fn ScatterSeries::set_radius(Self, Double) -> Self
+pub fn ScatterSeries::set_style(Self, PointStyle) -> Self
+
+pub(all) struct StackedBarSeries {
+  data : Array[(String, Array[Double])]
+  colors : Array[@color.Color]
+  bar_width : Double
+}
+pub fn StackedBarSeries::bounds(Self) -> (Double, Double)
+pub fn StackedBarSeries::category_count(Self) -> Int
+pub fn[B : @backend.Backend, SY : @coord.Scale] StackedBarSeries::draw(Self, B, @coord.CategoryScale, SY) -> Unit
+pub fn StackedBarSeries::new(Array[(String, Array[Double])]) -> Self
+pub fn StackedBarSeries::segment_count(Self) -> Int
+pub fn StackedBarSeries::set_bar_width(Self, Double) -> Self
+pub fn StackedBarSeries::set_colors(Self, Array[@color.Color]) -> Self
 
 // Type aliases
 
 // Traits
-

@@ -1,4 +1,4 @@
-// Generated using `moon info`, DON'T EDIT IT
+﻿// Generated using `moon info`, DON'T EDIT IT
 package "dgmxjj/moonplot/src/coord"
 
 // Values
@@ -38,6 +38,22 @@ pub fn LogarithmicScale::map(Self, Double) -> Double
 pub fn LogarithmicScale::new(Double, Double, Double, Double, base? : Double) -> Self
 pub impl Scale for LogarithmicScale
 
+pub(all) struct NumericDomain {
+  lower : Double
+  upper : Double
+}
+pub fn NumericDomain::clamp(Self, Double) -> Double
+pub fn NumericDomain::contains(Self, Double) -> Bool
+pub fn NumericDomain::from_values(Array[Double]) -> Self
+pub fn NumericDomain::max(Self) -> Double
+pub fn NumericDomain::min(Self) -> Double
+pub fn NumericDomain::new(Double, Double) -> Self
+pub fn NumericDomain::nice(Self, Int) -> Self
+pub fn NumericDomain::normalize(Self, Double) -> Double
+pub fn NumericDomain::pad(Self, Double) -> Self
+pub fn NumericDomain::span(Self) -> Double
+pub fn NumericDomain::ticks(Self, Int) -> Array[Double]
+
 // Type aliases
 
 // Traits
@@ -45,4 +61,3 @@ pub trait Scale {
   fn map(Self, Double) -> Double
   fn generate_ticks(Self, Int) -> Array[Double]
 }
-

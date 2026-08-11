@@ -1,4 +1,4 @@
-// Generated using `moon info`, DON'T EDIT IT
+﻿// Generated using `moon info`, DON'T EDIT IT
 package "dgmxjj/moonplot/src/backend"
 
 import {
@@ -18,6 +18,9 @@ pub struct CanvasBackend {
   width : Double
   height : Double
 }
+pub fn CanvasBackend::clear(Self) -> Unit
+pub fn CanvasBackend::command_at(Self, Int) -> String
+pub fn CanvasBackend::command_count(Self) -> Int
 pub fn CanvasBackend::new(Double, Double) -> Self
 pub fn CanvasBackend::to_js_code(Self, String) -> String
 pub impl Backend for CanvasBackend
@@ -33,8 +36,10 @@ pub struct SVGBackend {
   mut content : String
   width : Double
   height : Double
+  mut elements : Int
 }
 pub fn SVGBackend::add_raw(Self, String) -> Unit
+pub fn SVGBackend::element_count(Self) -> Int
 pub fn SVGBackend::new(Double, Double) -> Self
 pub fn SVGBackend::to_string(Self) -> String
 pub impl Backend for SVGBackend
@@ -62,4 +67,3 @@ pub trait Backend {
   fn draw_polygon(Self, Array[(Double, Double)], @color.Color, Bool) -> Unit
   fn draw_text(Self, String, Double, Double, Font, @color.Color, TextAlign, TextBaseline) -> Unit
 }
-

@@ -38,3 +38,53 @@ test "series_with_empty_data_emits_no_shapes" {
   assert_true(!svg.contains("<line"))
   assert_true(!svg.contains("<circle"))
 }
+
+///|
+test "series_configuration_and_bounds_are_reusable" {
+  let line = @series.LineSeries::new([(2.0, 8.0), (-1.0, 3.0)])
+    .set_width(-4.0)
+    .set_smooth(true)
+  assert_eq(line.width, 0.0)
+  assert_eq(line.is_smooth(), true)
+  let (line_x_min, line_y_min, line_x_max, line_y_max) = line.bounds()
+  assert_eq(line_x_min, -1.0)
+  assert_eq(line_y_min, 3.0)
+  assert_eq(line_x_max, 2.0)
+  assert_eq(line_y_max, 8.0)
+
+  let bar = @series.BarSeries::new([("A", -3.0), ("B", 7.0)])
+    .set_bar_width(2.0)
+    .set_color(@color.blue)
+  assert_eq(bar.bar_width, 1.0)
+  let (bar_min, bar_max) = bar.bounds()
+  assert_eq(bar_min, -3.0)
+  assert_eq(bar_max, 7.0)
+
+  let scatter = @series.ScatterSeries::new([(1.0, 4.0), (5.0, -2.0)])
+    .set_radius(-1.0)
+    .set_style(@series.PointStyle::Square)
+  assert_eq(scatter.radius, 0.0)
+  let (scatter_x_min, scatter_y_min, scatter_x_max, scatter_y_max) = scatter.bounds()
+  assert_eq(scatter_x_min, 1.0)
+  assert_eq(scatter_y_min, -2.0)
+  assert_eq(scatter_x_max, 5.0)
+  assert_eq(scatter_y_max, 4.0)
+}
+
+///|
+test "stacked_bars_keep_positive_and_negative_baselines_separate" {
+  let backend = @backend.SVGBackend::new(240.0, 160.0)
+  let scale_x = @coord.CategoryScale::new(["A", "B"], 0.0, 240.0)
+  let scale_y = @coord.LinearScale::new(-4.0, 6.0, 140.0, 0.0)
+  let stacked = @series.StackedBarSeries::new([
+    ("A", [2.0, 3.0]),
+    ("B", [-1.0, 2.0]),
+  ])
+  assert_eq(stacked.category_count(), 2)
+  assert_eq(stacked.segment_count(), 2)
+  let (low, high) = stacked.bounds()
+  assert_eq(low, -1.0)
+  assert_eq(high, 5.0)
+  stacked.draw(backend, scale_x, scale_y)
+  assert_eq(backend.element_count(), 4)
+}

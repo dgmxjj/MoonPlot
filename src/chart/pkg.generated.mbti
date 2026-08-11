@@ -1,4 +1,4 @@
-// Generated using `moon info`, DON'T EDIT IT
+﻿// Generated using `moon info`, DON'T EDIT IT
 package "dgmxjj/moonplot/src/chart"
 
 import {
@@ -12,6 +12,26 @@ import {
 // Errors
 
 // Types and methods
+pub(all) struct Annotation {
+  text : String
+  x : Double
+  y : Double
+  color : @color.Color
+  size : Double
+}
+pub fn Annotation::new(String, Double, Double) -> Self
+pub fn Annotation::set_color(Self, @color.Color) -> Self
+pub fn Annotation::set_size(Self, Double) -> Self
+pub fn Annotation::text(Self) -> String
+
+pub(all) struct AnnotationLayer {
+  annotations : Array[Annotation]
+}
+pub fn AnnotationLayer::add(Self, Annotation) -> Self
+pub fn AnnotationLayer::count(Self) -> Int
+pub fn[B : @backend.Backend, SX : @coord.Scale, SY : @coord.Scale] AnnotationLayer::draw(Self, B, SX, SY) -> Unit
+pub fn AnnotationLayer::new() -> Self
+
 pub struct Axis {
   label : String
   show_ticks : Bool
@@ -65,4 +85,3 @@ pub fn LegendItem::new(String, @color.Color, String) -> Self
 // Type aliases
 
 // Traits
-

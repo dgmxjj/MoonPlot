@@ -54,3 +54,17 @@ test "chart_layout_keeps_a_positive_plot_for_small_canvas" {
   assert_true(x_min < x_max)
   assert_true(y_min < y_max)
 }
+
+///|
+test "annotation_layer_uses_shared_scales_and_backend" {
+  let backend = @backend.SVGBackend::new(200.0, 120.0)
+  let scale = @coord.LinearScale::new(0.0, 10.0, 20.0, 180.0)
+  let annotations = @chart.AnnotationLayer::new().add(
+    @chart.Annotation::new("peak & review", 5.0, 8.0),
+  )
+  assert_eq(annotations.count(), 1)
+  annotations.draw(backend, scale, scale)
+  let svg = backend.to_string()
+  assert_true(svg.contains("peak &amp; review"))
+  assert_true(svg.contains("text-anchor=\"start\""))
+}

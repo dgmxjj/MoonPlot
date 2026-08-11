@@ -7,3 +7,11 @@
 - Corrected negative-value bar rectangles and escaped SVG/Canvas text output.
 - Replaced the pre-acceptance WIP README with reproducible install, run, API, scope and reference documentation.
 - Replaced CI with the three-platform official-installer workflow and added build validation.
+
+## 0.4.0 - 2026-08-12
+
+- Added portable CSV parsing with quoted fields, numeric-column conversion and row-level errors.
+- Added reusable numeric statistics: summaries, quantiles, histograms, normalization, windows, correlation, robust outliers and deterministic resampling.
+- Added responsive `PanelGrid`, wrapping `LegendLayout`, categorical color palettes and series bounds/configuration helpers.
+- Added UCI Iris benchmark subset, throughput/latency regression fixture, executable benchmark example and reproducibility documentation.
+- Fixed MoonBit 0.10.3 executable package configuration by using `options(is_main: true)`.
