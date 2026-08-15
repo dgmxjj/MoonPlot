@@ -93,6 +93,8 @@ println(backend.to_string())
 
 完整的 API 说明见 [`docs/API.md`](docs/API.md)，布局设计见 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)。
 
+组委会验收驳回意见与仓库证据的逐项映射见 [`docs/ACCEPTANCE.md`](docs/ACCEPTANCE.md)。
+
 ## 项目结构
 
 ```text
