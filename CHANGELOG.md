@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.0 - 2026-08-15
+
+- Added table profiling, stable grouped numeric summaries, and two-dimensional numeric pivots.
+- Added linear regression, residual/MSE diagnostics, z-scores, standard error, and autocorrelation.
+- Added reusable area, range-band, box-plot, heatmap, and named dashboard panel APIs.
+- Added an independently testable advanced report example combining profiling, grouping, regression, and heatmap rendering.
+- Expanded boundary tests across empty, ragged, constant, reversed, negative, and invalid inputs.
+
 ## 0.3.0 - 2026-08-07
 
 - Added all-target chart regression tests for Canvas, SVG, Bar, Scatter and scale boundaries.

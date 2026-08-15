@@ -6,6 +6,32 @@ package "dgmxjj/moonplot/src/data"
 // Errors
 
 // Types and methods
+pub(all) struct CategoryCount {
+  value : String
+  count : Int
+}
+
+pub(all) enum ColumnKind {
+  Empty
+  Numeric
+  Categorical
+  Mixed
+} derive(Eq)
+
+pub(all) struct ColumnProfile {
+  name : String
+  kind : ColumnKind
+  row_count : Int
+  missing_count : Int
+  numeric_count : Int
+  distinct_count : Int
+  numeric_min : Double
+  numeric_max : Double
+  numeric_mean : Double
+  categories : Array[CategoryCount]
+}
+pub fn ColumnProfile::category_counts(Self) -> Array[CategoryCount]
+
 pub(all) enum CsvError {
   EmptyInput
   UnterminatedQuote(Int)
@@ -22,14 +48,46 @@ pub fn CsvTable::cell(Self, Int, Int) -> String
 pub fn CsvTable::column(Self, String) -> Array[String]
 pub fn CsvTable::column_count(Self) -> Int
 pub fn CsvTable::filter_equals(Self, String, String) -> Self
+pub fn CsvTable::group_numeric(Self, String, String) -> Result[Array[GroupSummary], CsvError]
 pub fn CsvTable::has_column(Self, String) -> Bool
 pub fn CsvTable::headers(Self) -> Array[String]
 pub fn CsvTable::is_empty(Self) -> Bool
 pub fn CsvTable::numeric_column(Self, String) -> Result[Array[Double], CsvError]
 pub fn CsvTable::parse(String) -> Result[Self, CsvError]
+pub fn CsvTable::pivot_numeric(Self, String, String, String) -> Result[PivotTable, CsvError]
+pub fn CsvTable::profile(Self) -> TableProfile
 pub fn CsvTable::row_count(Self) -> Int
 pub fn CsvTable::select_columns(Self, Array[String]) -> Result[Self, CsvError]
 pub fn CsvTable::to_csv(Self) -> String
+
+pub(all) struct GroupSummary {
+  key : String
+  count : Int
+  sum : Double
+  mean : Double
+  min : Double
+  max : Double
+}
+
+pub(all) struct PivotTable {
+  row_keys : Array[String]
+  column_keys : Array[String]
+  values : Array[Array[Double]]
+}
+pub fn PivotTable::cell(Self, Int, Int) -> Double
+pub fn PivotTable::column_count(Self) -> Int
+pub fn PivotTable::column_key(Self, Int) -> String
+pub fn PivotTable::maximum(Self) -> Double
+pub fn PivotTable::minimum(Self) -> Double
+pub fn PivotTable::row_count(Self) -> Int
+pub fn PivotTable::row_key(Self, Int) -> String
+
+pub(all) struct TableProfile {
+  row_count : Int
+  column_count : Int
+  columns : Array[ColumnProfile]
+}
+pub fn TableProfile::column(Self, String) -> ColumnProfile?
 
 // Type aliases
 

@@ -89,6 +89,15 @@ jobs:
           grep -q '<line ' benchmark.svg
           rm -f benchmark.svg
 
+      - name: Run advanced report example
+        run: |
+          moon run examples/advanced_report --target wasm > advanced-report.svg
+          grep -q 'rows=4;columns=3' advanced-report.svg
+          grep -q 'groups=east=11.5,west=17' advanced-report.svg
+          grep -q 'slope=-0.18' advanced-report.svg
+          grep -q '<rect ' advanced-report.svg
+          rm -f advanced-report.svg
+
       - name: Check formatting
         run: moon fmt --check src examples
 

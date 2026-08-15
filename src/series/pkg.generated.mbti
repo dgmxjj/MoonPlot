@@ -12,6 +12,18 @@ import {
 // Errors
 
 // Types and methods
+pub(all) struct AreaSeries {
+  points : Array[(Double, Double)]
+  baseline : Double
+  color : @color.Color
+}
+pub fn AreaSeries::bounds(Self) -> (Double, Double, Double, Double)
+pub fn[B : @backend.Backend, SX : @coord.Scale, SY : @coord.Scale] AreaSeries::draw(Self, B, SX, SY) -> Unit
+pub fn AreaSeries::new(Array[(Double, Double)]) -> Self
+pub fn AreaSeries::point_count(Self) -> Int
+pub fn AreaSeries::set_baseline(Self, Double) -> Self
+pub fn AreaSeries::set_color(Self, @color.Color) -> Self
+
 pub(all) struct BarSeries {
   data : Array[(String, Double)]
   color : @color.Color
@@ -23,6 +35,42 @@ pub fn BarSeries::new(Array[(String, Double)]) -> Self
 pub fn BarSeries::set_bar_width(Self, Double) -> Self
 pub fn BarSeries::set_color(Self, @color.Color) -> Self
 pub fn BarSeries::values(Self) -> Array[Double]
+
+pub(all) struct BoxPlotSeries {
+  position : Double
+  minimum_value : Double
+  lower_quartile_value : Double
+  median_value : Double
+  upper_quartile_value : Double
+  maximum_value : Double
+  box_width : Double
+  color : @color.Color
+}
+pub fn[B : @backend.Backend, SX : @coord.Scale, SY : @coord.Scale] BoxPlotSeries::draw(Self, B, SX, SY) -> Unit
+pub fn BoxPlotSeries::lower_quartile(Self) -> Double
+pub fn BoxPlotSeries::maximum(Self) -> Double
+pub fn BoxPlotSeries::median(Self) -> Double
+pub fn BoxPlotSeries::minimum(Self) -> Double
+pub fn BoxPlotSeries::new(Double, Array[Double]) -> Self
+pub fn BoxPlotSeries::set_color(Self, @color.Color) -> Self
+pub fn BoxPlotSeries::set_width(Self, Double) -> Self
+pub fn BoxPlotSeries::upper_quartile(Self) -> Double
+pub fn BoxPlotSeries::width(Self) -> Double
+
+pub(all) struct HeatmapSeries {
+  values : Array[Array[Double]]
+  low : Double
+  high : Double
+  start_color : @color.Color
+  end_color : @color.Color
+}
+pub fn HeatmapSeries::cell(Self, Int, Int) -> Double
+pub fn HeatmapSeries::columns(Self) -> Int
+pub fn[B : @backend.Backend, SX : @coord.Scale, SY : @coord.Scale] HeatmapSeries::draw(Self, B, SX, SY) -> Unit
+pub fn HeatmapSeries::new(Array[Array[Double]]) -> Self
+pub fn HeatmapSeries::rows(Self) -> Int
+pub fn HeatmapSeries::set_colors(Self, @color.Color, @color.Color) -> Self
+pub fn HeatmapSeries::set_domain(Self, Double, Double) -> Self
 
 pub(all) struct LineSeries {
   points : Array[(Double, Double)]
@@ -43,6 +91,20 @@ pub(all) enum PointStyle {
   Square
   Cross
 }
+
+pub(all) struct RangeSeries {
+  points : Array[(Double, Double, Double)]
+  opacity_value : Double
+  fill_color : @color.Color
+  line_color : @color.Color
+}
+pub fn RangeSeries::bounds(Self) -> (Double, Double, Double, Double)
+pub fn[B : @backend.Backend, SX : @coord.Scale, SY : @coord.Scale] RangeSeries::draw(Self, B, SX, SY) -> Unit
+pub fn RangeSeries::new(Array[(Double, Double, Double)]) -> Self
+pub fn RangeSeries::opacity(Self) -> Double
+pub fn RangeSeries::set_colors(Self, @color.Color, @color.Color) -> Self
+pub fn RangeSeries::set_opacity(Self, Double) -> Self
+pub fn RangeSeries::values(Self) -> Array[(Double, Double, Double)]
 
 pub(all) struct ScatterSeries {
   points : Array[(Double, Double)]

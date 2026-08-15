@@ -1,0 +1,7 @@
+import {
+  "dgmxjj/moonplot/examples/advanced_report/report",
+}
+
+options(
+  is_main: true,
+)

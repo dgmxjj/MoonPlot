@@ -12,10 +12,24 @@ pub(all) struct HistogramBin {
   count : Int
 }
 
+pub(all) struct LinearRegression {
+  slope : Double
+  intercept : Double
+  r_squared : Double
+  sample_count : Int
+  x_mean : Double
+  y_mean : Double
+}
+pub fn LinearRegression::fit(Array[Double], Array[Double]) -> Self
+pub fn LinearRegression::mean_squared_error(Self, Array[Double], Array[Double]) -> Double
+pub fn LinearRegression::predict(Self, Double) -> Double
+pub fn LinearRegression::residuals(Self, Array[Double], Array[Double]) -> Array[Double]
+
 pub(all) struct NumericSeries {
   name : String
   data : Array[Double]
 }
+pub fn NumericSeries::autocorrelation(Self, Int) -> Double
 pub fn NumericSeries::clip(Self, Double, Double) -> Self
 pub fn NumericSeries::correlation(Self, Self) -> Double
 pub fn NumericSeries::cumulative_sum(Self) -> Self
@@ -24,6 +38,7 @@ pub fn NumericSeries::exponential_moving_average(Self, Double) -> Self
 pub fn NumericSeries::histogram(Self, Int) -> Array[HistogramBin]
 pub fn NumericSeries::is_empty(Self) -> Bool
 pub fn NumericSeries::length(Self) -> Int
+pub fn NumericSeries::linear_regression(Self, Array[Double]) -> LinearRegression
 pub fn NumericSeries::map_values(Self, (Double) -> Double) -> Self
 pub fn NumericSeries::max(Self) -> Double
 pub fn NumericSeries::mean(Self) -> Double
@@ -42,12 +57,14 @@ pub fn NumericSeries::rolling_min(Self, Int) -> Self
 pub fn NumericSeries::scale(Self, Double) -> Self
 pub fn NumericSeries::shift(Self, Double) -> Self
 pub fn NumericSeries::slice(Self, Int, Int) -> Self
+pub fn NumericSeries::standard_error(Self) -> Double
 pub fn NumericSeries::stddev(Self) -> Double
 pub fn NumericSeries::sum(Self) -> Double
 pub fn NumericSeries::summary(Self) -> Summary
 pub fn NumericSeries::take(Self, Int) -> Self
 pub fn NumericSeries::values(Self) -> Array[Double]
 pub fn NumericSeries::variance(Self) -> Double
+pub fn NumericSeries::z_scores(Self) -> Self
 
 pub(all) struct Summary {
   count : Int

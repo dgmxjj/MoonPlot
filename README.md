@@ -11,8 +11,10 @@ MoonPlot 是一个完全由 MoonBit 编写的声明式数据图表生成与可�
 - 后端无关的 `Backend` trait：内置 `SVGBackend` 和 Canvas 2D 命令后端。
 - 折线图、散点图和柱状图数据系列，支持线性、对数和分类比例尺。
 - 支持正负分离堆叠柱状图、数据范围估计、注释层和稳定分类调色板。
+- 支持 CSV 表格剖析、分组聚合、二维透视表和数值列的线性回归诊断。
+- 支持面积图、区间带、箱线图和热力图，并复用同一套 SVG/Canvas 后端。
 - `ChartBuilder` + `ChartLayout` 声明式布局：标题、图例、网格和绘图区边界由同一个布局对象计算。
-- 图例宽度自适应，极小画布也保持有效的绘图区；网格可以按图表声明关闭。
+- 图例宽度自适应，极小画布也保持有效的绘图区；`Dashboard` 提供命名多面板布局。
 - 纯 MoonBit 实现，带有边界测试、可执行示例和三平台 CI。
 
 ## 安装
@@ -20,7 +22,7 @@ MoonPlot 是一个完全由 MoonBit 编写的声明式数据图表生成与可�
 ### 从 Mooncakes 安装
 
 ```bash
-moon add dgmxjj/moonplot@0.4.0
+moon add dgmxjj/moonplot@0.5.0
 ```
 
 包发布后，按模块包路径导入，例如 `dgmxjj/moonplot/src/chart`、`dgmxjj/moonplot/src/series` 和 `dgmxjj/moonplot/src/backend`。如果要使用仓库中的示例或参与开发，请直接克隆源码。
@@ -38,12 +40,13 @@ moon version --all
 
 ## 可执行示例
 
-两个示例都是可直接运行的 MoonBit executable package，会把 SVG 写到标准输出：
+示例都是可直接运行的 MoonBit executable package，会把 SVG 写到标准输出：
 
 ```bash
 moon run examples/basic_line > line_chart.svg
 moon run examples/basic_bar > bar_chart.svg
 moon run examples/benchmark_summary > iris-benchmark.svg
+moon run examples/advanced_report > advanced-report.svg
 ```
 
 PowerShell 用户可以显式指定 UTF-8 输出：
@@ -62,6 +65,8 @@ make examples
 `line_chart.svg` 应包含折线 `<line>`、坐标轴、网格和图例；`bar_chart.svg` 应包含柱形 `<rect>`、分类刻度和图例。生成的本地 SVG 不纳入版本控制。
 
 基准示例使用仓库内的 UCI Iris 18 行数据子集，执行完整的 CSV 解析、统计摘要、比例尺和 SVG 渲染链路。数据来源、CC BY 4.0 署名和预期结果见 [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md)。
+
+`advanced_report` 展示表格剖析、区域分组、线性回归和热力图组合流程，输出开头应包含 `rows=4;columns=3`、`groups=east=11.5,west=17` 和 `slope=-0.18`。为保证 WASM 不依赖文件系统，该示例使用版本化的内嵌 CSV；仓库中的 CSV 文件仍作为可审计基准夹具。
 
 ## 最小使用方式
 
@@ -95,11 +100,11 @@ src/backend/   Backend trait、SVGBackend、CanvasBackend
 src/chart/     ChartBuilder、ChartLayout、标题、图例、网格和坐标轴
 src/color/     Color、调色板和颜色混合
 src/coord/     LinearScale、LogarithmicScale、CategoryScale
-src/series/    LineSeries、ScatterSeries、BarSeries 与数据范围辅助
-src/data/      纯字符串 CSV 表格解析与数值列转换
-src/stats/     描述性统计、分位数、分箱、窗口聚合和相关系数
-src/layout/    多面板网格与图例换行布局
-examples/      可执行 SVG 示例与版本化基准数据
+src/series/    折线、散点、柱状、堆叠、面积、区间、箱线和热力图系列
+src/data/      CSV 解析、剖析、分组聚合和二维数值透视
+src/stats/     描述性统计、回归、分位数、分箱、窗口和序列诊断
+src/layout/    多面板网格、命名仪表盘与图例换行布局
+examples/      可执行 SVG 示例、分析报告与版本化基准数据
 docs/          API、架构、基准、开发记录和参考范围
 ```
 
@@ -121,7 +126,7 @@ GitHub Actions 使用官方 MoonBit 安装器，在 `ubuntu-latest`、`macos-lat
 
 ### 边界行为
 
-空数据系列不输出图形；空 CSV 返回明确错误；CSV 列数不一致报告行号；非法数字列报告数据行号；常数比例尺回退到有效起点；负值柱状图以零线为基线；负半径、负柱宽、非法窗口和极小画布会被安全钳制；SVG/Canvas 文本会转义 XML/JavaScript 特殊字符。
+空数据系列不输出图形；空 CSV 返回明确错误；CSV 列数不一致报告行号；非法数字列报告数据行号；透视表和分组聚合跳过缺失单元并保留错误行号；常数比例尺回退到有效起点；负值柱状图和面积图以零线/基线处理；负半径、负柱宽、非法窗口、倒置区间和极小画布会被安全钳制；SVG/Canvas 文本会转义 XML/JavaScript 特殊字符。
 
 ## 当前范围与非目标
 

@@ -34,6 +34,15 @@ moon run examples/benchmark_summary --target wasm > iris-benchmark.svg
 
 异常输入也纳入测试：空 CSV、引号字段、逗号字段、列数不一致、非法数字、空序列、常数序列、非法分箱数、非正窗口、负柱状值、退化比例尺、极小画布和特殊字符转义。
 
+## Advanced report
+
+```bash
+moon run examples/advanced_report --target wasm > advanced-report.svg
+moon test examples/advanced_report/report --target wasm --deny-warn
+```
+
+该报告固定输出 4 行、3 列、两个区域分组和 `slope=-0.18` 的回归结果，并渲染 4 个热力图单元格。它同时验证表格剖析、分组聚合、线性回归、颜色插值和 SVG 后端；报告包的测试不依赖本地文件系统。
+
 ## 数据许可
 
 Iris 子集遵循原数据的 CC BY 4.0 署名要求；MoonPlot 源码仍以根目录 MIT License 发布。数据许可不改变源码许可证，使用者应同时遵守对应数据集的署名要求。

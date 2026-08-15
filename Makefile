@@ -1,4 +1,4 @@
-.PHONY: check build test fmt examples line-example bar-example
+.PHONY: check build test fmt examples line-example bar-example advanced-example
 
 check:
 	moon check --target all --deny-warn
@@ -12,10 +12,13 @@ test:
 fmt:
 	moon fmt --check
 
-examples: line-example bar-example
+examples: line-example bar-example advanced-example
 
 line-example:
 	moon run examples/basic_line > line_chart.svg
 
 bar-example:
 	moon run examples/basic_bar > bar_chart.svg
+
+advanced-example:
+	moon run examples/advanced_report > advanced-report.svg

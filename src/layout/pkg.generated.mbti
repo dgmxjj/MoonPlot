@@ -6,6 +6,25 @@ package "dgmxjj/moonplot/src/layout"
 // Errors
 
 // Types and methods
+pub(all) struct Dashboard {
+  grid : PanelGrid
+  panel_limit : Int
+  titles : Array[String]
+}
+pub fn Dashboard::add_panel(Self, String) -> Self
+pub fn Dashboard::content_bounds(Self) -> Rect
+pub fn Dashboard::new(Double, Double, Int, Int) -> Self
+pub fn Dashboard::panel(Self, Int) -> DashboardPanel
+pub fn Dashboard::panel_count(Self) -> Int
+pub fn Dashboard::set_gap(Self, Double, Double) -> Self
+pub fn Dashboard::set_margins(Self, Double, Double, Double, Double) -> Self
+
+pub(all) struct DashboardPanel {
+  title : String
+  bounds : Rect
+  index : Int
+}
+
 pub(all) struct LegendEntry {
   label : String
   width : Double
